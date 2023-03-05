@@ -1,0 +1,14 @@
+*.a
+*.la
+*.lo
+*.log
+*.o
+*.so
+*.tmp
+
+/.deps/
+
+/config.h
+/config.make
+
+/gwbot

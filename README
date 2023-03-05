@@ -1,0 +1,90 @@
+GNU/Weeb Telegram Bot (2)
+=========================
+
+Hi,
+
+As promised previously, this is the initial git tree for the new GNU/Weeb
+Telegram bot project. I encourage everyone to contribute to this project. I am
+looking forward to your contribution.
+
+I call it GNUWeebBot2. It's the second attempt to create a Telegram bot
+project for the GNU/Weeb community; the former GNUWeebBot doesn't perform
+really well. This one will be the better version of it.
+
+Currently, this project only runs on Linux.
+
+## LICENSE
+
+In the spirit of the open-source community, this project is fully open-source.
+This project is licensed under GPLv2 (which is my default license choice).
+
+## Directory Structures
+
+  1. modules/ - this is where bot modules are stored, something like bot
+  commands, welcome messages, etc. (relevant to the bot response and pluggable
+  bot behavior).
+
+  2. core/ - contains the core bot code. It contains the entry point, event
+  loop, ring, etc. This part is the most complex part of the project. Be
+  careful when touching this code. Take care of your mental health; it can
+  make you crazy.
+
+  3. include/ - contains header files that need to get included across
+  multiple subsystems.
+
+  4. lib/ - contains library code, like telegram API, string helpers, curl,
+  etc.
+
+  5. tests/ - contains unit tests code. Currently, it's not much comfortable
+  to make a new test. You can skip this part at the moment.
+
+
+## The MAINTAINERS file
+
+The template comes from the Linux kernel MAINTAINERS file. If someone adds a
+new module, please maintain it. Put your name and email into this file.
+
+
+## Build Tools
+
+- gcc or clang (just one of them)
+
+- g++ or clang++ (just one of them)
+
+- make
+
+- sh (for ./configure)
+
+For Ubuntu: sudo apt install clang make gcc g++ -y
+
+Please adapt the build tools installation if you use other Linux distros.
+
+
+## Dependencies
+
+For Ubuntu: sudo apt install -y libcurl4-gnutls-dev libjson-c-dev
+
+Please adapt the dependencies installation if you use other Linux distros.
+
+
+## How to build this
+
+Building with clang:
+
+  ./configure --cc=clang --cxx=clang++;
+  make -j8;
+
+Building with GCC:
+
+  ./configure --cc=gcc --cxx=g++;
+  make -j8;   
+
+(whatever your compilers choice).
+
+## How to run this
+
+  export GNUWEEB_TG_BOT_TOKEN="your telegram bot token here";
+  ./gwbot;
+
+-- 
+Ammar Faizi

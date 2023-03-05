@@ -1,0 +1,27 @@
+{
+	"editor.tabSize": 8,
+	"editor.insertSpaces": false,
+	"editor.detectIndentation": false,
+	"editor.rulers": [80],
+	"files.associations": {
+		"string_view": "cpp",
+		"thread": "cpp",
+		"condition_variable": "cpp",
+		"thread.h": "c",
+		"stdint.h": "c",
+		"assert.h": "c",
+		"array": "cpp",
+		"initializer_list": "cpp",
+		"utility": "cpp",
+		"common.h": "c",
+		"string.h": "c",
+		"ring.h": "c",
+		"tgapi.h": "c",
+		"stdatomic.h": "c",
+		"errno.h": "c",
+		"module.h": "c",
+		"stdlib.h": "c",
+		"mod_info.h": "c"
+	},
+	"C_Cpp.errorSquiggles": "disabled"
+}

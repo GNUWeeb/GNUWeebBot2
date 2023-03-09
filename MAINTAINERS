@@ -74,6 +74,6 @@ THE REST
 M:	Ammar Faizi
 L:	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
 S:	Maintained
-T:	git git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+T:	git https://github.com/GNUWeeb/GNUWeebBot2.git
 F:	*
 F:	*/

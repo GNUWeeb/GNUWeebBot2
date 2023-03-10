@@ -656,7 +656,7 @@ int tgapi_call_send_message(struct tg_api_ctx *ctx,
 					     (int)strlen(call->text));
 	if (!escape_text)
 		return -ENOMEM;
-    
+
 	snprintf(url, sizeof(url),
 		 "https://api.telegram.org/bot%s/sendMessage?chat_id=%" PRId64
 		 "&text=%s&reply_to_message_id=%" PRId64,
@@ -664,7 +664,7 @@ int tgapi_call_send_message(struct tg_api_ctx *ctx,
 		 call->reply_to_message_id);
 
 	curl_free(escape_text);
-	
+
 	printf("Curl exec to: %s\n", url);
 	curl_easy_setopt(ch, CURLOPT_URL, url);
 	curl_easy_setopt(ch, CURLOPT_WRITEFUNCTION, tgapi_curl_write);

@@ -100,9 +100,9 @@ print_config()
 }
 
 # Default flags.
-CFLAGS="-O2 -D_GNU_SOURCE -include ${build_dir}/config.h";
-CXXFLAGS="-O2 -D_GNU_SOURCE -include ${build_dir}/config.h";
-LDFLAGS="-O2";
+CFLAGS="-I/usr/include -I/usr/local/include -O2 -D_GNU_SOURCE -include ${build_dir}/config.h";
+CXXFLAGS="-I/usr/include -I/usr/local/include -O2 -D_GNU_SOURCE -include ${build_dir}/config.h";
+LDFLAGS="-L/usr/lib -L/usr/local/lib -O2";
 LIB_LDFLAGS="-lpthread -ljson-c -lcurl";
 
 # Print configure header at the top of $config_h.

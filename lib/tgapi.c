@@ -640,7 +640,7 @@ int tgapi_call_send_message(struct tg_api_ctx *ctx,
 			    const struct tga_call_send_message *call)
 {
 	struct curl_data data = { 0 };
-	char url[256];
+	char url[4096*3 + 128];
 	CURLcode res;
 	CURL *ch;
 

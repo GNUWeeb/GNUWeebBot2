@@ -10,9 +10,16 @@
 extern "C" {
 #endif
 
+#if defined(__linux__)
+#include <pthread.h>
+typedef pthread_t thread_t;
+typedef pthread_mutex_t mutex_t;
+typedef pthread_cond_t cond_t;
+#else /* #if defined(__linux__) */
 typedef struct thread_struct *thread_t;
 typedef struct mutex_struct *mutex_t;
 typedef struct cond_struct *cond_t;
+#endif /* #if defined(__linux__) */
 
 int thread_create(thread_t *ts_p, void *(*func)(void *), void *arg);
 int thread_join(thread_t ts, void **ret);

@@ -62,7 +62,16 @@ out_free_curl:
 
 void gw_curl_global_cleanup(void)
 {
+	struct curl_handle_list *cd = g_gw_curl_data;
+	size_t i;
+
+	mutex_lock(&cd->mutex);
+	for (i = 0; i < cd->nr_handles; i++)
+		curl_easy_cleanup(cd->handles[i]);
+	free(cd->handles);
 	curl_global_cleanup();
+	mutex_unlock(&cd->mutex);
+	free(cd);
 }
 
 static int gw_curl_realloc_handles(struct curl_handle_list *cd)

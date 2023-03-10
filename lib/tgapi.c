@@ -652,7 +652,8 @@ int tgapi_call_send_message(struct tg_api_ctx *ctx,
 	 * TODO(ammarfaizi2): Use POST method and encode the data.
 	 */
 	
-	char *escape_text = curl_easy_escape(ch, call->text, strlen(call->text));
+	char *escape_text = curl_easy_escape(ch, call->text,
+					     (int)strlen(call->text));
 	if (!escape_text)
 		return -ENOMEM;
     

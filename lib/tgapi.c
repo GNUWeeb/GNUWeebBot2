@@ -79,9 +79,8 @@ static int tgj_get_chat(struct tg_chat *chat, json_object *jchat)
 		return -ENOENT;
 	chat->id = json_object_get_int64(res);
 
-	if (unlikely(!json_object_object_get_ex(jchat, "title", &res)))
-		return -ENOENT;
-	chat->title = json_object_get_string(res);
+	if (json_object_object_get_ex(jchat, "title", &res))
+		chat->title = json_object_get_string(res);
 
 	if (likely(json_object_object_get_ex(jchat, "type", &res))) {
 		const char *p = json_object_get_string(res);

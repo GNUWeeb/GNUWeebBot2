@@ -104,6 +104,7 @@ void *gw_curl_thread_init(void)
 	if (cd->nr_handles >= cd->allocated) {
 		if (gw_curl_realloc_handles(cd)) {
 			mutex_unlock(&cd->mutex);
+			curl_easy_cleanup(ret);
 			return NULL;
 		}
 	}

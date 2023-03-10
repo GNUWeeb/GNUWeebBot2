@@ -15,6 +15,70 @@
 extern "C" {
 #endif
 
+#if defined(__linux__)
+
+int thread_create(thread_t *ts_p, void *(*func)(void *), void *arg)
+{
+	return pthread_create(ts_p, nullptr, func, arg);
+}
+
+int thread_join(thread_t ts, void **ret)
+{
+	return pthread_join(ts, ret);
+}
+
+void thread_detach(thread_t ts)
+{
+	pthread_detach(ts);
+}
+
+int mutex_init(mutex_t *m)
+{
+	return pthread_mutex_init(m, nullptr);
+}
+
+int mutex_lock(mutex_t *m)
+{
+	return pthread_mutex_lock(m);
+}
+
+int mutex_unlock(mutex_t *m)
+{
+	return pthread_mutex_unlock(m);
+}
+
+void mutex_destroy(mutex_t *m)
+{
+	pthread_mutex_destroy(m);
+}
+
+int cond_init(cond_t *c)
+{
+	return pthread_cond_init(c, nullptr);
+}
+
+int cond_wait(cond_t *c, mutex_t *m)
+{
+	return pthread_cond_wait(c, m);
+}
+
+int cond_signal(cond_t *c)
+{
+	return pthread_cond_signal(c);
+}
+
+int cond_broadcast(cond_t *c)
+{
+	return pthread_cond_broadcast(c);
+}
+
+void cond_destroy(cond_t *c)
+{
+	pthread_cond_destroy(c);
+}
+
+#else /* #if defined(__linux__) */
+
 struct thread_struct {
 	std::thread	thread;
 	void		*ret;
@@ -142,6 +206,8 @@ void cond_destroy(struct cond_struct **c)
 	free(*c);
 	*c = nullptr;
 }
+
+#endif /* #if defined(__linux__) */
 
 #ifdef __cplusplus
 } // extern "C"

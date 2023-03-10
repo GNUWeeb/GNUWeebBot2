@@ -599,37 +599,43 @@ static size_t tgapi_curl_write(char *ptr, size_t size, size_t nmemb, void *dd)
 	return real_size;
 }
 
-/*
- * TODO(ammarfaizi2): Avoid curl repetition.
- */
+static int curl_http_get(const char *url, struct curl_data *data)
+{
+	CURLcode res;
+	CURL *ch;
+
+	ch = gw_curl_thread_init();
+	if (unlikely(!ch))
+		return -ENOMEM;
+
+	curl_easy_setopt(ch, CURLOPT_URL, url);
+	curl_easy_setopt(ch, CURLOPT_WRITEFUNCTION, tgapi_curl_write);
+	curl_easy_setopt(ch, CURLOPT_WRITEDATA, data);
+
+	res = curl_easy_perform(ch);
+	if (res != CURLE_OK) {
+		fprintf(stderr, "curl_easy_perform() to URL %s failed: %s\n",
+			url, curl_easy_strerror(res));
+		return -1;
+	}
+
+	return 0;
+}
 
 int tgapi_call_get_updates(struct tg_api_ctx *ctx,
 			   struct tg_updates **updates_p, int64_t offset)
 {
 	struct curl_data data = { 0 };
 	char url[256];
-	CURLcode res;
-	CURL *ch;
 	int ret;
-
-	ch = gw_curl_thread_init();
-	if (unlikely(!ch))
-		return -ENOMEM;
 
 	snprintf(url, sizeof(url),
 		 "https://api.telegram.org/bot%s/getUpdates?offset=%" PRId64,
 		 ctx->token, offset);
 
-	curl_easy_setopt(ch, CURLOPT_URL, url);
-	curl_easy_setopt(ch, CURLOPT_WRITEFUNCTION, tgapi_curl_write);
-	curl_easy_setopt(ch, CURLOPT_WRITEDATA, &data);
-
-	res = curl_easy_perform(ch);
-	if (res != CURLE_OK) {
-		fprintf(stderr, "Curl with URL \"%s\" failed: %s\n", url,
-			curl_easy_strerror(res));
-		return -1;
-	}
+	ret = curl_http_get(url, &data);
+	if (unlikely(ret))
+		return ret;
 
 	ret = tgapi_parse_updates_len(updates_p, data.data, data.len + 1u);
 	free(data.data);
@@ -641,17 +647,13 @@ int tgapi_call_send_message(struct tg_api_ctx *ctx,
 {
 	struct curl_data data = { 0 };
 	char url[4096*3 + 128];
-	CURLcode res;
 	CURL *ch;
+	int ret;
 
 	ch = gw_curl_thread_init();
 	if (unlikely(!ch))
 		return -ENOMEM;
 
-	/*
-	 * TODO(ammarfaizi2): Use POST method and encode the data.
-	 */
-	
 	char *escape_text = curl_easy_escape(ch, call->text,
 					     (int)strlen(call->text));
 	if (!escape_text)
@@ -664,19 +666,10 @@ int tgapi_call_send_message(struct tg_api_ctx *ctx,
 		 call->reply_to_message_id);
 
 	curl_free(escape_text);
-
-	printf("Curl exec to: %s\n", url);
-	curl_easy_setopt(ch, CURLOPT_URL, url);
-	curl_easy_setopt(ch, CURLOPT_WRITEFUNCTION, tgapi_curl_write);
-	curl_easy_setopt(ch, CURLOPT_WRITEDATA, &data);
-
-	res = curl_easy_perform(ch);
-	if (res != CURLE_OK) {
-		fprintf(stderr, "Curl with URL \"%s\" failed: %s\n", url,
-			curl_easy_strerror(res));
-		return -1;
-	}
-
+	printf("Curl to URL: %s\n", url);
+	ret = curl_http_get(url, &data);
+	if (unlikely(ret))
+		return ret;
 	free(data.data);
 	return 0;
 }

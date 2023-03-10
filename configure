@@ -9,8 +9,8 @@
 
 set -e;
 
-cc=${CC:-gcc};
-cxx=${CXX:-g++};
+cc=${CC:-cc};
+cxx=${CXX:-c++};
 ld=${LD:-$cc};
 build_dir=${O:-$(dirname $(realpath $0))};
 

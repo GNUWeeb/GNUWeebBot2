@@ -72,5 +72,6 @@ struct tg_bot_ctx {
 	struct tg_api_ctx	tctx;
 	int64_t			max_update_id;
 };
+#include <gw/print.h>
 
 #endif /* #ifndef GNUWEEB__COMMON_H */

@@ -147,6 +147,7 @@ static int run_tg_bot(struct tg_bot_ctx *ctx)
 	}
 
 	arm_update_sqe(ctx);
+	pr_info("GNU/Weeb bot is running");
 	while (true) {
 		ret = run_tg_bot_loop(ctx);
 		if (unlikely(ret))
@@ -176,6 +177,12 @@ int main(void)
 		return 1;
 	}
 
+	ret = gw_print_global_init();
+	if (ret) {
+		fprintf(stderr, "Failed to init print: %s\n", strerror(-ret));
+		goto out;
+	}
+
 	ret = gw_ring_init(&ctx.ring, 8192);
 	if (ret) {
 		fprintf(stderr, "Failed to init ring: %s\n", strerror(-ret));
@@ -187,6 +194,7 @@ int main(void)
 		fprintf(stderr, "Failed to run tg bot: %s\n", strerror(-ret));
 
 	gw_ring_destroy(&ctx.ring);
+	gw_print_global_destroy();
 out:
 	if (ret < 0)
 		ret = -ret;

@@ -64,7 +64,7 @@ EOF
 exit 0;
 fi
 
-mkdir -pv "${build_dir}";
+mkdir -p "${build_dir}";
 build_dir="$(realpath "${build_dir}")";
 
 tmp_dir="${build_dir}/.tmp";
@@ -73,7 +73,7 @@ tmp_c="${tmp_dir}/tmp.c";
 tmp_cpp="${tmp_dir}/tmp.cpp";
 tmp_exe="${tmp_dir}/tmp.exe";
 
-mkdir -pv "${tmp_dir}";
+mkdir -p "${tmp_dir}";
 rm -f "${build_dir}/config.log";
 
 config_make="${build_dir}/config.make";

@@ -40,6 +40,9 @@ for opt do
 	--sanitize)
 		use_sanitize="yes";
 	;;
+	--cpp-thread)
+		use_cpp_thread="yes";
+	;;
 	*)
 		echo "ERROR: unknown option $opt";
 		echo "Try '$0 --help' for more information";
@@ -60,6 +63,7 @@ Options: [defaults in brackets after descriptions]
   --cxx=CMD                Use CMD as the C++ compiler
   --debug                  Build with debug enabled
   --sanitize               Build with sanitize enabled
+  --cpp-thread             Force to use C++ thread implementation
 EOF
 exit 0;
 fi
@@ -306,6 +310,10 @@ if test "${use_sanitize}" = "yes"; then
 	CFLAGS="${CFLAGS} -fsanitize=address -fsanitize=undefined";
 	CXXFLAGS="${CXXFLAGS} -fsanitize=address -fsanitize=undefined";
 	LDFLAGS="${LDFLAGS} -fsanitize=address -fsanitize=undefined";
+fi;
+
+if test "${use_cpp_thread}" = "yes"; then
+	add_config "CONFIG_CPP_THREAD";
 fi;
 
 add_config "CONFIG_MODULE_PING";

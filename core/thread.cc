@@ -15,7 +15,7 @@
 extern "C" {
 #endif
 
-#if defined(__linux__)
+#if !defined(CONFIG_CPP_THREAD)
 
 int thread_create(thread_t *ts_p, void *(*func)(void *), void *arg)
 {

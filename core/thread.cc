@@ -181,11 +181,20 @@ int cond_init(struct cond_struct **c)
 	return 0;
 }
 
+static int __cond_wait(struct cond_struct *c, struct mutex_struct *m)
+{
+	std::unique_lock<std::mutex> lock(m->mutex, std::adopt_lock);
+	c->cond.wait(lock);
+	return 0;
+}
+
 int cond_wait(struct cond_struct **c, struct mutex_struct **m)
 {
-	std::unique_lock<std::mutex> lock((*m)->mutex, std::defer_lock);
-	(*c)->cond.wait(lock);
-	return 0;
+	int ret;
+
+	ret = __cond_wait(*c, *m);
+	mutex_lock(m);
+	return ret;
 }
 
 int cond_signal(struct cond_struct **c)

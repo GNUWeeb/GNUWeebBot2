@@ -69,6 +69,7 @@ Maintainers List
           first. When adding to this list, please keep the entries in
           alphabetical order.
 
+
 THREAD
 M:	Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
 L:	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
@@ -76,6 +77,14 @@ S:	Maintained
 T:	git https://github.com/alviroiskandar/GNUWeebBot2.git
 F:	core/thread.cc
 F:	include/gw/thread.h
+
+PRINT HELPER FUNCTIONS
+M:      Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
+L:      GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
+S:	Maintained
+T:      git https://github.com/alviroiskandar/GNUWeebBot2.git
+F:	core/print.c
+F:	include/gw/print.h
 
 THE REST
 M:	Ammar Faizi

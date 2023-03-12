@@ -10,7 +10,7 @@
 extern "C" {
 #endif
 
-#if defined(__linux__)
+#if !defined(CONFIG_CPP_THREAD)
 #include <pthread.h>
 typedef pthread_t thread_t;
 typedef pthread_mutex_t mutex_t;

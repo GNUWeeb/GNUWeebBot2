@@ -88,7 +88,8 @@ struct thread_struct {
 };
 
 struct mutex_struct {
-	std::mutex	mutex;
+	std::mutex			mutex;
+	std::unique_lock<std::mutex>	*ulock;
 };
 
 struct cond_struct {
@@ -157,7 +158,18 @@ int mutex_lock(struct mutex_struct **m)
 
 int mutex_unlock(struct mutex_struct **m)
 {
-	(*m)->mutex.unlock();
+	std::unique_lock<std::mutex> *ulock;
+
+	ulock = (*m)->ulock;
+	if (ulock) {
+		(*m)->ulock = nullptr;
+		ulock->unlock();
+		delete ulock;
+		return 0;
+	} else {
+		(*m)->mutex.unlock();
+	}
+
 	return 0;
 }
 
@@ -181,20 +193,19 @@ int cond_init(struct cond_struct **c)
 	return 0;
 }
 
-static int __cond_wait(struct cond_struct *c, struct mutex_struct *m)
-{
-	std::unique_lock<std::mutex> lock(m->mutex, std::adopt_lock);
-	c->cond.wait(lock);
-	return 0;
-}
-
 int cond_wait(struct cond_struct **c, struct mutex_struct **m)
 {
-	int ret;
+	std::unique_lock<std::mutex> *ulock;
 
-	ret = __cond_wait(*c, *m);
-	mutex_lock(m);
-	return ret;
+	ulock = new(std::nothrow)
+			std::unique_lock<std::mutex>((*m)->mutex,
+						     std::adopt_lock);
+	if (!ulock)
+		return -ENOMEM;
+
+	(*m)->ulock = ulock;
+	(*c)->cond.wait(*ulock);
+	return 0;
 }
 
 int cond_signal(struct cond_struct **c)

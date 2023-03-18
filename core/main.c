@@ -20,8 +20,10 @@ static void arm_update_sqe(struct tg_bot_ctx *ctx)
 	struct gw_ring_sqe *sqe;
 
 	sqe = gw_ring_get_sqe(&ctx->ring);
-	if (unlikely(!sqe))
+	if (unlikely(!sqe)) {
 		gw_ring_submit(&ctx->ring);
+		sqe = gw_ring_get_sqe(&ctx->ring);
+	}
 
 	ctx->updates = NULL;
 	gw_ring_prep_tg_get_updates(sqe, &ctx->tctx, &ctx->updates,
@@ -34,8 +36,10 @@ static int prep_update_handle(struct tg_bot_ctx *ctx, struct tg_update *up)
 	struct gw_ring_sqe *sqe;
 
 	sqe = gw_ring_get_sqe(&ctx->ring);
-	if (unlikely(!sqe))
+	if (unlikely(!sqe)) {
 		gw_ring_submit(&ctx->ring);
+		sqe = gw_ring_get_sqe(&ctx->ring);
+	}
 
 	gw_ring_prep_tg_module_handle(sqe, ctx, up);
 	sqe->user_data = 0;
